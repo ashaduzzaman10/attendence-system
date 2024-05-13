@@ -1,37 +1,35 @@
-const { Schema, model } = require("mongoose");
+const { model, Schema } = require("mongoose");
 
 const userSchema = new Schema({
   name: {
     type: String,
     required: true,
     minlength: 3,
-    maxLength: 30,
+    maxlength: 30,
   },
   email: {
     type: String,
     required: true,
     validate: {
-      validator: function (value) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
+      validator: function (v) {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
       },
-      message: (prop) => `invalid email : ${prop.value}`,
+      message: (prop) => `Invalid email: ${prop.value}`,
     },
   },
   password: {
     type: String,
-    minLength: [8, "password is too short"],
+    minlength: [6, "password is too short"],
     required: true,
   },
-  roles: [
-    {
-      type: String,
-      require: true,
-      default: "student",
-    },
-  ],
+  roles: {
+    type: [String],
+    required: true,
+    default: ["STUDENT"],
+  },
   accountStatus: {
     type: String,
-    enum: ["ACTIVE", "PENDING", "REJECT"],
+    enum: ["PENDING", "ACTIVE", "REJECTED"],
     default: "PENDING",
     required: true,
   },

@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const StudentAttendanceSchema = new Schema(
+const studentAttendanceSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -13,10 +13,8 @@ const StudentAttendanceSchema = new Schema(
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const StudentAttendance = model("StudentAttendance", StudentAttendanceSchema);
+const StudentAttendance = model("StudentAttendance", studentAttendanceSchema);
 module.exports = StudentAttendance;

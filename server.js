@@ -1,28 +1,22 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./db");
+const authenticate = require("./middleware/authenticate");
+const routes = require("./routes");
 const cors = require("cors");
 const morgan = require("morgan");
-const routes = require("./routes");
-const authenticate = require("./middleware/authenticate");
 
 const app = express();
+app.use([morgan("dev"), cors()]);
+app.use(express.json());
+app.use(routes);
 
-app.use(express.json(), express.urlencoded({ extended: true }), [
-  (cors(), morgan("dev"), routes),
-]);
-
-app.get("/private", authenticate, (req, res) => {
-  console.log("user : ", req.user);
+app.get("/private", authenticate, async (req, res) => {
   return res.status(200).json({ message: "I am a private route" });
 });
 
-app.get("/public", (req, res) => {
+app.get("/public", authenticate, (req, res) => {
   return res.status(200).json({ message: "I am a public route" });
-});
-
-app.get("/health", (req, res) => {
-  return res.status(200).json({ message: "success" });
 });
 
 app.use((err, _req, res, _next) => {
@@ -42,4 +36,4 @@ connectDB("mongodb://localhost:27017/attendance-db")
       console.log("I am listening on port 4000");
     });
   })
-  .catch((err) => console.log(err));
+  .catch((e) => console.log(e));

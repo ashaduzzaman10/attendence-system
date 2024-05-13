@@ -3,6 +3,7 @@ const connectDB = require("./db");
 const cors = require("cors");
 const morgan = require("morgan");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken")
 const User = require("./models/User");
 
 const app = express();
@@ -55,11 +56,14 @@ app.get("/login", async (req, res, next) => {
       return res.status(400).json({
         message: "invalid credential",
       });
-    };
+    }
     delete user._doc.password;
+    const token = jwt.sign(user._doc, "process.env.JWT_SECRET",{expiresIn : "2hr"});
+
     return res.status(200).json({
-      message : "login successfully done",user
-    })
+      message: "login successfully done",
+      token
+    });
   } catch (err) {
     next(err);
   }

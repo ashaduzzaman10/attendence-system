@@ -31,8 +31,8 @@ const userSchema = new Schema({
   ],
   accountStatus: {
     type: String,
-    enum: ['ACTIVE','PENDING','REJECT'],
-    default: 'PENDING',
+    enum: ["ACTIVE", "PENDING", "REJECT"],
+    default: "PENDING",
     required: true,
   },
 });
